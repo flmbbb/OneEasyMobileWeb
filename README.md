@@ -67,3 +67,25 @@ UI库文档： https://vant-contrib.gitee.io/vant/v3/#/zh-CN
   4.C# 2021年5月入手，搞了个框架。 FastAPI值得你拥有
   5.其它杂七杂八的语言多会点，没办法打工的多这样，要这会那会
 总结：语言真的不重要，只是个工具，什么场景用什么工具。。
+
+#### 20210705更新简介
+增加路由缓存 App.vue
+```
+ <router-view v-slot="{ Component }">
+      <transition>
+        <keep-alive :include="tagsList">
+          <component :is="Component" />
+        </keep-alive>
+      </transition>
+    </router-view>
+```
+属性 tagsList=["EduXMList","Home"];要缓存的控件
+重点要缓存的页面 其name 值不可为空
+比如Home页面
+```
+<script lang="ts">
+  import { Options, Vue } from "vue-class-component";
+  import { TEduHot } from "@/views/aModel/edu";
+  @Options({
+    name:"Home",  //名字不可为空，且与tagsList一至
+```

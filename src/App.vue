@@ -11,7 +11,14 @@
         @click-left="onBack"
       />
     </template>
-    <router-view />
+    <router-view v-slot="{ Component }">
+      <transition>
+        <keep-alive :include="tagsList">
+          <component :is="Component" />
+        </keep-alive>
+      </transition>
+    </router-view>
+
     <template v-if="navBarShowFoot">
       <van-tabbar v-model="indexTabbar" @change="onChangeTabbar">
         <van-tabbar-item
@@ -19,14 +26,14 @@
           icon="wap-home-o"
           replace
           to="/"
-          style="background-color:#00CCFF; font-size: 16px"
+          style="background-color: #00ccff; font-size: 16px"
           >主页</van-tabbar-item
         >
         <van-tabbar-item
           name="search"
           icon="friends-o"
           to="/StudentUser"
-          style="background-color:#00CCFF; font-size: 16px"
+          style="background-color: #00ccff; font-size: 16px"
           >个人中心</van-tabbar-item
         >
       </van-tabbar>
@@ -38,23 +45,23 @@
 import { Options, Vue } from "vue-class-component";
 import { mapState } from "vuex";
 import { THTTPRequest } from "@/baselib/helper/HTTPClient";
-import store,{TTokenInfo} from "./store";
+import store, { TTokenInfo } from "./store";
 //配合着用
 @Options({
-  components: {
-  },
+  components: {},
   computed: {
     ...mapState(["isLoading", "navBarShow", "navBarTitle", "navBarShowFoot"]),
   },
 })
 export default class App extends Vue {
+  private tagsList:string[]=["EduXMList","Home"];
   private indexTabbar: string = "home";
   public created() {
-      document.title=this.$myGlobal.appTitle;
-      var lTokenInfo = localStorage.getItem(TTokenInfo.storageName);
-      if (lTokenInfo != null) {
-         store.state.tokenInfo = JSON.parse(lTokenInfo);
-      }
+    document.title = this.$myGlobal.appTitle;
+    var lTokenInfo = localStorage.getItem(TTokenInfo.storageName);
+    if (lTokenInfo != null) {
+      store.state.tokenInfo = JSON.parse(lTokenInfo);
+    }
   }
   private onChangeTabbar(qIndexName: string) {
     this.indexTabbar = qIndexName;
